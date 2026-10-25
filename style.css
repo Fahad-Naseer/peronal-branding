@@ -1,0 +1,122 @@
+/* ==========================================================
+   Fahad | personal branding site
+   Order: 1 tokens, 2 base, 3 header, 4 panels (mobile first),
+          5 tablet, 6 desktop, 7 contact and footer, 8 motion
+   ========================================================== */
+
+/* 1. Design tokens: change colors here only */
+:root {
+  --bg: #0F0F10;
+  --surface: #1C1C1E;
+  --accent: #FF6A00;
+  --text: #F0EBE3;
+  --muted: #A9A39B;
+  --border: #3A3A3D;
+  --font: "Helvetica Neue", Arial, "Segoe UI", sans-serif;
+  --font-display: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  --pad: clamp(16px, 3vw, 32px);
+  --panels-h: clamp(520px, 75vh, 760px); /* desktop panel row height */
+}
+
+/* 2. Base */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.5; scroll-behavior: smooth; }
+body { min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+main { flex: 1; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip-link { position: absolute; left: var(--pad); top: -80px; z-index: 10; padding: 10px 16px; background: var(--accent); color: var(--bg); font-weight: 800; }
+.skip-link:focus { top: 12px; }
+
+/* 3. Header */
+.site-header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; padding: 20px var(--pad); border-bottom: 3px solid var(--border); }
+.site-header h1 { font: 900 clamp(28px, 4vw, 40px)/1 var(--font-display); text-transform: uppercase; letter-spacing: 0.02em; }
+.headline { flex: 1 1 260px; color: var(--muted); font-weight: 600; }
+.site-nav { display: flex; gap: 24px; margin-left: auto; }
+.site-nav a { padding: 4px 0; border-bottom: 3px solid transparent; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
+.site-nav a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* 4. Panels, mobile first: a vertical accordion of bands */
+.portfolio { padding: var(--pad); }
+.panels { list-style: none; padding: 0; border: 3px solid var(--border); }
+.panel { display: flex; flex-direction: column; background: var(--surface); }
+.panel + .panel { border-top: 3px solid var(--border); }
+
+.toggle { display: flex; width: 100%; height: 84px; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.media { flex: 0 0 84px; overflow: hidden; }
+.media img { width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 50% 30%); }
+.label { flex: 1; display: flex; align-items: center; gap: 14px; min-width: 0; padding: 0 14px; }
+.num { font: 900 22px/1 var(--font-display); color: var(--accent); }
+.label-text { display: flex; flex-direction: column; min-width: 0; }
+.name { font-size: 15px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+.tag { font-size: 13px; color: var(--muted); }
+
+.caption { max-width: 48ch; padding: 20px 16px 28px; }
+.big-num { font: 900 48px/1 var(--font-display); color: var(--accent); }
+.caption h3 { margin: 10px 0 12px; font: 900 24px/1.1 var(--font-display); text-transform: uppercase; }
+.caption .text { margin-bottom: 16px; }
+.rep { padding-top: 12px; border-top: 2px solid var(--border); color: var(--accent); font-size: 14px; font-weight: 700; }
+
+/* Open band, also used for every band when JavaScript is off */
+.panel.is-open .toggle, html:not(.js) .toggle { height: auto; flex-direction: column; }
+.panel.is-open .media, html:not(.js) .media { flex: none; width: 100%; aspect-ratio: 4 / 5; }
+.panel.is-open .label, html:not(.js) .label { display: none; }
+.js .panel:not(.is-open) .caption { display: none; }
+html:not(.js) .panels { max-width: 720px; margin: 0 auto; }
+.js .panel:not(.is-open) .toggle:hover { outline: 3px solid var(--accent); outline-offset: -3px; }
+.toggle:focus-visible { outline-offset: -3px; }
+
+/* 5. Tablet: open band shows photo and caption side by side */
+@media (min-width: 700px) and (max-width: 1099px) {
+  .panel.is-open, html:not(.js) .panel { flex-direction: row; }
+  .panel.is-open .toggle, html:not(.js) .toggle { flex: none; width: min(48%, 420px); }
+  .panel.is-open .caption, html:not(.js) .caption { flex: 1; min-width: 0; padding: 24px; }
+}
+
+/* 6. Desktop: one row of expanding vertical panels */
+@media (min-width: 1100px) {
+  .js .panels { display: flex; height: var(--panels-h); }
+  .js .panel { flex: 1 1 0; flex-direction: row; min-width: 76px; min-height: 0; overflow: hidden; transition: flex-grow 0.35s ease; }
+  .js .panel + .panel { border-top: 0; border-left: 3px solid var(--border); }
+  .js .panel.is-open { flex-grow: 8; }
+
+  /* Closed strip: photo slice on top, label block below */
+  .js .toggle { flex: 1 1 auto; flex-direction: column; height: 100%; }
+  .js .media { flex: 1 1 0; width: 100%; min-height: 0; aspect-ratio: auto; }
+  .js .label { flex: 0 0 250px; height: 250px; min-height: 0; overflow: hidden; display: grid; grid-template-rows: auto 1fr; align-items: start; gap: 12px; padding: 12px 10px; border-top: 3px solid var(--border); }
+  .js .label-text { display: block; min-height: 0; overflow: hidden; writing-mode: vertical-rl; }
+  .js .name { display: block; font-size: 14px; }
+  .js .tag { display: block; font-size: 12px; }
+
+  /* Open panel: full 4:5 photo plus caption column */
+  .js .panel.is-open .toggle { flex: 0 0 calc((var(--panels-h) - 6px) * 0.8); width: auto; }
+  .js .panel.is-open .media { flex: 1 1 auto; }
+  .js .panel.is-open .label { display: none; }
+  .js .panel.is-open .caption { flex: 1; min-width: 0; padding: 28px clamp(20px, 2.4vw, 36px); overflow: hidden; }
+  .js .caption .text, .js .caption h3 { max-width: 30ch; }
+  .big-num { font-size: 72px; }
+  .caption h3 { font-size: clamp(24px, 2.2vw, 32px); }
+}
+
+/* 7. Contact and footer */
+.contact { padding: 8px var(--pad) calc(var(--pad) * 1.5); }
+.contact h2 { font: 900 clamp(28px, 4vw, 44px)/1 var(--font-display); text-transform: uppercase; }
+.contact-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 20px; padding: 0; list-style: none; }
+.contact-link { display: block; padding: 18px 20px; border: 3px solid var(--border); text-decoration: none; }
+.contact-link span { display: block; color: var(--muted); font-size: 14px; }
+.contact-link strong { font-size: clamp(16px, 2.2vw, 22px); overflow-wrap: anywhere; }
+.contact-link:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.contact-link:hover span { color: var(--bg); }
+.site-footer { padding: 20px var(--pad); border-top: 3px solid var(--border); color: var(--muted); font-size: 14px; }
+
+/* 8. Motion: only the panel widening and a short caption fade */
+.caption { animation: fade-in 0.3s ease; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .panel, .caption { transition: none; animation: none; }
+}
