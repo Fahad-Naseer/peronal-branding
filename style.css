@@ -5,6 +5,14 @@
    ========================================================== */
 
 /* 1. Design tokens: change colors here only */
+@font-face {
+  font-family: "Montserrat";
+  src: url("fonts/montserrat-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg: #0F0F10;
   --surface: #1C1C1E;
@@ -12,16 +20,16 @@
   --text: #F0EBE3;
   --muted: #A9A39B;
   --border: #3A3A3D;
-  --font: "Helvetica Neue", Arial, "Segoe UI", sans-serif;
-  --font-display: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  --font: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Montserrat", "Arial Black", Arial, sans-serif;
   --pad: clamp(16px, 3vw, 32px);
-  --panels-h: clamp(520px, 75vh, 760px); /* desktop panel row height */
+  --panels-h: clamp(520px, min(75vh, 46vw), 760px); /* desktop panel row height, limited by width so captions keep room */
 }
 
 /* 2. Base */
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
-html { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.5; scroll-behavior: smooth; }
+html { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 17px; font-weight: 300; line-height: 1.55; scroll-behavior: smooth; scroll-padding-top: 88px; }
 body { min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 main { flex: 1; }
 img { display: block; max-width: 100%; }
@@ -33,27 +41,25 @@ a { color: inherit; }
 .skip-link:focus { top: 12px; }
 
 /* 3. Header */
-.site-header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; padding: 20px var(--pad); border-bottom: 3px solid var(--border); }
-.site-header h1 { font: 900 clamp(28px, 4vw, 40px)/1 var(--font-display); text-transform: uppercase; letter-spacing: 0.02em; }
-.headline { flex: 1 1 260px; color: var(--muted); font-weight: 600; }
-.site-nav { display: flex; gap: 24px; margin-left: auto; }
-.site-nav a { padding: 4px 0; border-bottom: 3px solid transparent; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
-.site-nav a:hover { border-color: var(--accent); color: var(--accent); }
+.site-header { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 8px 24px; padding: 8px var(--pad); border-bottom: 3px solid var(--border); background: var(--bg); }
+.brand { display: inline-flex; align-items: center; min-height: 44px; font: 900 clamp(24px, 3.4vw, 32px)/1 var(--font-display); text-transform: uppercase; letter-spacing: 0.02em; text-decoration: none; }
+.site-nav { display: flex; gap: clamp(8px, 2vw, 24px); }
+.site-nav a { transition: color 0.25s ease, border-color 0.25s ease; display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; border-bottom: 3px solid transparent; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
 
 /* 4. Panels, mobile first: a vertical accordion of bands */
 .portfolio { padding: var(--pad); }
 .panels { list-style: none; padding: 0; border: 3px solid var(--border); }
-.panel { display: flex; flex-direction: column; background: var(--surface); }
+.panel { scroll-margin-top: 88px; display: flex; flex-direction: column; background: var(--surface); }
 .panel + .panel { border-top: 3px solid var(--border); }
 
-.toggle { display: flex; width: 100%; height: 84px; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.toggle { -webkit-tap-highlight-color: transparent; touch-action: manipulation; display: flex; width: 100%; height: 84px; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .media { flex: 0 0 84px; overflow: hidden; }
-.media img { width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 50% 30%); }
+.media img { width: 100%; height: 100%; object-fit: cover; object-position: calc(var(--fx, 0.5) * 100%) calc(var(--fy, 0.3) * 100%); }
 .label { flex: 1; display: flex; align-items: center; gap: 14px; min-width: 0; padding: 0 14px; }
 .num { font: 900 22px/1 var(--font-display); color: var(--accent); }
 .label-text { display: flex; flex-direction: column; min-width: 0; }
 .name { font-size: 15px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
-.tag { font-size: 13px; color: var(--muted); }
+.tag { font-size: 13px; font-weight: 500; color: var(--muted); }
 
 .caption { max-width: 48ch; padding: 20px 16px 28px; }
 .big-num { font: 900 48px/1 var(--font-display); color: var(--accent); }
@@ -67,7 +73,6 @@ a { color: inherit; }
 .panel.is-open .label, html:not(.js) .label { display: none; }
 .js .panel:not(.is-open) .caption { display: none; }
 html:not(.js) .panels { max-width: 720px; margin: 0 auto; }
-.js .panel:not(.is-open) .toggle:hover { outline: 3px solid var(--accent); outline-offset: -3px; }
 .toggle:focus-visible { outline-offset: -3px; }
 
 /* 5. Tablet: open band shows photo and caption side by side */
@@ -77,46 +82,121 @@ html:not(.js) .panels { max-width: 720px; margin: 0 auto; }
   .panel.is-open .caption, html:not(.js) .caption { flex: 1; min-width: 0; padding: 24px; }
 }
 
-/* 6. Desktop: one row of expanding vertical panels */
+/* 6. Desktop: one row of expanding vertical panels.
+   The photo keeps one fixed size and is revealed by the panel opening,
+   so nothing resizes or jumps while the row animates. */
 @media (min-width: 1100px) {
-  .js .panels { display: flex; height: var(--panels-h); }
-  .js .panel { flex: 1 1 0; flex-direction: row; min-width: 76px; min-height: 0; overflow: hidden; transition: flex-grow 0.35s ease; }
+  .js .panels { --w: calc((var(--panels-h) - 6px) * 0.8); --ih: calc(var(--panels-h) - 6px); --ease: cubic-bezier(0.22, 0.7, 0.2, 1); display: flex; height: var(--panels-h); }
+  .js .panel { position: relative; flex: 1 1 0; flex-direction: row; min-width: 76px; min-height: 0; overflow: hidden; transition: flex-grow 0.6s var(--ease); }
   .js .panel + .panel { border-top: 0; border-left: 3px solid var(--border); }
   .js .panel.is-open { flex-grow: 8; }
 
-  /* Closed strip: photo slice on top, label block below */
-  .js .toggle { flex: 1 1 auto; flex-direction: column; height: 100%; }
-  .js .media { flex: 1 1 0; width: 100%; min-height: 0; aspect-ratio: auto; }
-  .js .label { flex: 0 0 250px; height: 250px; min-height: 0; overflow: hidden; display: grid; grid-template-rows: auto 1fr; align-items: start; gap: 12px; padding: 12px 10px; border-top: 3px solid var(--border); }
+  .js .toggle { flex: none; flex-direction: column; width: min(100%, var(--w)); height: 100%; }
+  .js .media { position: relative; flex: 1 1 0; width: 100%; min-height: 0; aspect-ratio: auto; }
+  .js .media img { position: absolute; max-width: none; width: var(--w); height: var(--ih);
+    left: clamp(calc(100% - var(--w)), calc(50% - var(--w) * var(--fx, 0.5)), 0px);
+    top: clamp(calc(100% - var(--ih)), calc(50% - var(--ih) * var(--fy, 0.3)), 0px);
+    filter: brightness(0.7); transition: filter 0.5s ease; }
+  .js .panel.is-open .media img { filter: none; }
+
+  /* Closed strip label collapses smoothly when the panel opens */
+  .js .label { flex: none; height: 250px; min-height: 0; overflow: hidden; display: grid; grid-template-rows: auto 1fr; align-items: start; gap: 12px; padding: 12px 10px; border-top: 3px solid var(--border); transition: height 0.6s var(--ease), padding 0.6s var(--ease), border-top-width 0.6s var(--ease), opacity 0.3s ease; }
+  .js .panel.is-open .label { display: grid; height: 0; padding-top: 0; padding-bottom: 0; border-top-width: 0; opacity: 0; }
   .js .label-text { display: block; min-height: 0; overflow: hidden; writing-mode: vertical-rl; }
   .js .name { display: block; font-size: 14px; }
   .js .tag { display: block; font-size: 12px; }
 
-  /* Open panel: full 4:5 photo plus caption column */
-  .js .panel.is-open .toggle { flex: 0 0 calc((var(--panels-h) - 6px) * 0.8); width: auto; }
-  .js .panel.is-open .media { flex: 1 1 auto; }
-  .js .panel.is-open .label { display: none; }
-  .js .panel.is-open .caption { flex: 1; min-width: 0; padding: 28px clamp(20px, 2.4vw, 36px); overflow: hidden; }
+  /* Caption sits beside the photo and fades in after the panel starts opening */
+  .js .caption, .js .panel:not(.is-open) .caption { display: block; position: absolute; top: 0; bottom: 0; left: var(--w); width: min(440px, calc(20vw + 10px)); padding: 28px clamp(20px, 2.4vw, 36px); overflow: hidden; opacity: 0; visibility: hidden; transform: translateX(24px); animation: none; transition: opacity 0.25s ease, transform 0.5s var(--ease), visibility 0s 0.3s; }
+  .js .panel.is-open .caption { opacity: 1; visibility: visible; transform: none; transition: opacity 0.4s ease 0.25s, transform 0.6s var(--ease) 0.2s, visibility 0s; }
   .js .caption .text, .js .caption h3 { max-width: 30ch; }
   .big-num { font-size: 72px; }
   .caption h3 { font-size: clamp(24px, 2.2vw, 32px); }
+}
+
+/* Narrow desktops: tighter caption column so the controls always fit */
+@media (min-width: 1100px) and (max-width: 1279px) {
+  .js .panel.is-open { flex-grow: 10; }
+}
+@media (min-width: 1100px) and (max-width: 1439px) {
+  .js .panel.is-open .caption { padding: 20px 18px; }
+  .js .big-num { font-size: 48px; }
+  .js .caption h3 { font-size: 22px; margin: 6px 0 8px; }
+  .js .caption .text { margin-bottom: 12px; font-size: 16px; }
+  .js .panel-nav { margin-top: 14px; }
+  .js .panel-nav .btn { padding: 0 12px; }
 }
 
 /* 7. Contact and footer */
 .contact { padding: 8px var(--pad) calc(var(--pad) * 1.5); }
 .contact h2 { font: 900 clamp(28px, 4vw, 44px)/1 var(--font-display); text-transform: uppercase; }
 .contact-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 20px; padding: 0; list-style: none; }
-.contact-link { display: block; padding: 18px 20px; border: 3px solid var(--border); text-decoration: none; }
-.contact-link span { display: block; color: var(--muted); font-size: 14px; }
+.contact-link { background-image: linear-gradient(var(--accent), var(--accent)); background-repeat: no-repeat; background-size: 0% 100%; transition: background-size 0.4s ease, color 0.3s ease, border-color 0.3s ease; display: block; min-height: 64px; padding: 18px 20px; -webkit-tap-highlight-color: transparent; touch-action: manipulation; border: 3px solid var(--border); text-decoration: none; }
+.contact-link span { display: block; color: var(--muted); font-size: 14px; transition: color 0.3s ease; }
 .contact-link strong { font-size: clamp(16px, 2.2vw, 22px); overflow-wrap: anywhere; }
-.contact-link:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); }
-.contact-link:hover span { color: var(--bg); }
 .site-footer { padding: 20px var(--pad); border-top: 3px solid var(--border); color: var(--muted); font-size: 14px; }
+
+/* 7b. Hero, band, buttons, panel controls, extras */
+.hero { position: relative; isolation: isolate; overflow: hidden; padding: clamp(40px, 8vw, 96px) var(--pad) clamp(32px, 6vw, 72px); border-bottom: 3px solid var(--border); }
+.hero h1 { margin-left: -0.04em; font: 900 clamp(64px, 17vw, 220px)/0.85 var(--font-display); letter-spacing: -0.02em; text-transform: uppercase; }
+.hero-headline { margin-top: clamp(16px, 2.5vw, 28px); color: var(--accent); font: 700 clamp(18px, 2.4vw, 28px)/1.25 var(--font); }
+.hero-sub { max-width: 48ch; margin-top: 12px; font-size: clamp(16px, 1.6vw, 19px); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.hero > :not(.hero-bg) { position: relative; z-index: 1; }
+.hero-bg { position: absolute; inset: 0; z-index: 0; display: flex; flex-direction: column; justify-content: space-around; pointer-events: none; }
+.hero-glow { position: absolute; top: 0; bottom: 0; left: 0; width: 200%; background: linear-gradient(90deg, transparent 0%, rgba(255, 106, 0, 0.2) 14%, transparent 32%, rgba(255, 106, 0, 0.12) 62%, transparent 80%, rgba(255, 106, 0, 0.2) 100%); animation: glow-drift 18s ease-in-out infinite alternate; will-change: transform; }
+.marquee-row { position: relative; display: flex; width: max-content; font: 900 clamp(80px, 13vw, 190px)/1 var(--font-display); white-space: pre; color: transparent; -webkit-text-stroke: 2px rgba(240, 235, 227, 0.13); animation: marquee 70s linear infinite; will-change: transform; }
+.marquee-row.reverse { animation-direction: reverse; animation-duration: 90s; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes glow-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.band { padding: 14px var(--pad); background: var(--accent); color: var(--bg); }
+.band p { font: 800 clamp(13px, 1.8vw, 18px)/1.2 var(--font); letter-spacing: 0.1em; text-transform: uppercase; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border: 3px solid var(--text); background: transparent; color: var(--text); font: 800 15px/1 var(--font); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; background-image: linear-gradient(var(--text), var(--text)); background-repeat: no-repeat; background-position: left center; background-size: 0% 100%; transition: background-size 0.35s ease, color 0.3s ease, border-color 0.3s ease, transform 0.12s ease; }
+.btn-primary { border-color: var(--accent); background: var(--accent); color: var(--bg); }
+.btn:disabled { border-color: var(--border); color: var(--muted); cursor: default; }
+.btn-primary:disabled { background: transparent; }
+
+.panel-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px; }
+.panel-nav .count { margin-right: auto; color: var(--muted); font: 700 14px/1 var(--font); letter-spacing: 0.08em; }
+.panel-nav .btn { min-width: 44px; min-height: 44px; padding: 0 16px; font-size: 13px; }
+
+.copy-btn { display: none; }
+.js .copy-btn { display: inline-flex; }
+.contact-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 16px; }
+.copy-status { color: var(--accent); font-weight: 700; }
+
+.to-top { transition: background-color 0.25s ease; position: fixed; right: var(--pad); bottom: var(--pad); z-index: 6; display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border: 3px solid var(--bg); background: var(--accent); color: var(--bg); font: 800 13px/1 var(--font); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.to-top[hidden] { display: none; }
+.site-nav a[aria-current="true"] { border-color: var(--accent); color: var(--accent); }
+
+/* Hover only where a mouse exists, so taps on phones never leave a stuck hover */
+@media (hover: hover) {
+  .site-nav a:hover { border-color: var(--accent); color: var(--accent); }
+  .btn:not(:disabled):hover { background-size: 100% 100%; border-color: var(--text); color: var(--bg); }
+  .js .panel:not(.is-open) .toggle:hover { outline: 3px solid var(--accent); outline-offset: -3px; }
+  .contact-link:hover { background-size: 100% 100%; border-color: var(--accent); color: var(--bg); }
+  .contact-link:hover span { color: var(--bg); }
+  .to-top:hover { background: var(--text); }
+}
+/* Pressed feedback on every device */
+.btn:not(:disabled):active { background-size: 100% 100%; border-color: var(--text); color: var(--bg); transform: scale(0.97); }
+.site-nav a:active { border-color: var(--accent); color: var(--accent); }
+.contact-link:active { background-size: 100% 100%; border-color: var(--accent); color: var(--bg); }
+.contact-link:active span { color: var(--bg); }
+.to-top:active { background: var(--text); }
+.js .panel:not(.is-open) .toggle:active { background: var(--bg); }
+
+@media (max-width: 480px) {
+  .hero-actions .btn { flex: 1 1 100%; }
+  .site-nav a { padding: 0 6px; font-size: 14px; }
+}
 
 /* 8. Motion: only the panel widening and a short caption fade */
 .caption { animation: fade-in 0.3s ease; }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .js .panel, .caption { transition: none; animation: none; }
+  .js .panel, .caption, .js .caption, .js .label, .js .media img, .btn, .contact-link { transition: none; animation: none; }
+  .hero-glow, .marquee-row { animation: none; }
 }

@@ -10,12 +10,11 @@
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
-<body>
+<body id="top">
   <a class="skip-link" href="#portfolio">Skip to portfolio</a>
 
   <header class="site-header">
-    <h1>Fahad</h1>
-    <p class="headline">Software Engineering Student | Aspiring Cloud Engineer</p>
+    <a class="brand" href="#top">Fahad</a>
     <nav class="site-nav" aria-label="Main">
       <a href="#portfolio">Portfolio</a>
       <a href="#contact">Contact</a>
@@ -23,6 +22,22 @@
   </header>
 
   <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="hero-glow"></div>
+        <div class="marquee-row"><span>SOFTWARE ENGINEERING / CLOUD / </span><span>SOFTWARE ENGINEERING / CLOUD / </span></div>
+        <div class="marquee-row reverse"><span>CLOUD / SOFTWARE ENGINEERING / </span><span>CLOUD / SOFTWARE ENGINEERING / </span></div>
+      </div>
+      <h1 id="hero-title">Fahad</h1>
+      <p class="hero-headline">Software Engineering Student | Aspiring Cloud Engineer</p>
+      <p class="hero-sub">Software Engineering student at Superior University Lahore, working toward a career in cloud engineering.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#portfolio">View portfolio</a>
+        <a class="btn" href="mailto:fhdnaseer009@gmail.com">Email me</a>
+      </div>
+    </section>
+    <div class="band"><p>Attire, skills, and roles in six scenarios</p></div>
+
     <section class="portfolio" id="portfolio" aria-labelledby="portfolio-title">
       <h2 class="visually-hidden" id="portfolio-title">Professional image portfolio</h2>
 
@@ -36,7 +51,7 @@
       -->
       <ul class="panels">
 
-        <li class="panel is-open" style="--focus: 50% 25%">
+        <li class="panel is-open" style="--fx: 0.50; --fy: 0.25">
           <button class="toggle" id="t1" type="button" aria-expanded="true" aria-controls="c1">
             <span class="media"><img src="images/01-business-formal.jpg" width="1000" height="1250" alt="Fahad standing in a white shirt and grey trousers in front of the Superior University sign"></span>
             <span class="label">
@@ -52,7 +67,7 @@
           </div>
         </li>
 
-        <li class="panel" style="--focus: 62% 30%">
+        <li class="panel" style="--fx: 0.62; --fy: 0.30">
           <button class="toggle" id="t2" type="button" aria-expanded="false" aria-controls="c2">
             <span class="media"><img src="images/02-skills-in-action.jpg" width="1000" height="1250" alt="Fahad in an olive jacket working on a laptop at a project demonstration while others watch" loading="lazy"></span>
             <span class="label">
@@ -68,7 +83,7 @@
           </div>
         </li>
 
-        <li class="panel" style="--focus: 66% 30%">
+        <li class="panel" style="--fx: 0.66; --fy: 0.30">
           <button class="toggle" id="t3" type="button" aria-expanded="false" aria-controls="c3">
             <span class="media"><img src="images/03-field-specific.jpg" width="1000" height="1250" alt="Fahad in a black shirt and cap working on a laptop with developer and AWS Cloud Clubs stickers in a library" loading="lazy"></span>
             <span class="label">
@@ -84,7 +99,7 @@
           </div>
         </li>
 
-        <li class="panel" style="--focus: 47% 55%">
+        <li class="panel" style="--fx: 0.47; --fy: 0.55">
           <button class="toggle" id="t4" type="button" aria-expanded="false" aria-controls="c4">
             <span class="media"><img src="images/04-creative-tech.jpg" width="1000" height="1250" alt="Fahad, fourth from the left, with five others outside TimeLapse Studio, a coworking and podcast space" loading="lazy"></span>
             <span class="label">
@@ -100,7 +115,7 @@
           </div>
         </li>
 
-        <li class="panel" style="--focus: 75% 35%">
+        <li class="panel" style="--fx: 0.75; --fy: 0.35">
           <button class="toggle" id="t5" type="button" aria-expanded="false" aria-controls="c5">
             <span class="media"><img src="images/05-presentation.jpg" width="1000" height="1250" alt="Fahad in a white shalwar kameez presenting beside a projected slide titled Trust and Inspire" loading="lazy"></span>
             <span class="label">
@@ -116,7 +131,7 @@
           </div>
         </li>
 
-        <li class="panel" style="--focus: 39% 55%">
+        <li class="panel" style="--fx: 0.39; --fy: 0.55">
           <button class="toggle" id="t6" type="button" aria-expanded="false" aria-controls="c6">
             <span class="media"><img src="images/06-team-networking.jpg" width="1000" height="1250" alt="Fahad, second from the left in a black shalwar kameez, with others at the Colors of Balochistan stall" loading="lazy"></span>
             <span class="label">
@@ -141,11 +156,16 @@
         <li><a class="contact-link" href="mailto:fhdnaseer009@gmail.com"><span>Email</span><strong>fhdnaseer009@gmail.com</strong></a></li>
         <li><a class="contact-link" href="https://github.com/Fahad-Naseer" target="_blank" rel="noopener noreferrer"><span>GitHub</span><strong>github.com/Fahad-Naseer</strong></a></li>
       </ul>
+      <div class="contact-actions">
+        <button class="btn btn-primary copy-btn" type="button" data-copy="fhdnaseer009@gmail.com">Copy email</button>
+        <span class="copy-status" role="status" aria-live="polite"></span>
+      </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <p>Fahad, 2026</p>
   </footer>
+  <a class="to-top" id="to-top" href="#top" hidden>Back to top</a>
 </body>
 </html>
